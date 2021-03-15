@@ -1,0 +1,2 @@
+"0","promedios.t <- t(promedios)"
+"0","colnames(promedios.t) <- wavenumber[,1]"

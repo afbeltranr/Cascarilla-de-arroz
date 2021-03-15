@@ -1,0 +1,28 @@
+{
+    "id": "43A280EA",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1615751459433.0,
+    "source_on_save": false,
+    "relative_order": 10,
+    "properties": {
+        "id": "547c1e82b94c4857896537c3a884fd19",
+        "name": "wavenumber",
+        "title": "wavenumber",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 2577803024320,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1615751459433,
+    "read_only": false,
+    "read_only_alternatives": []
+}

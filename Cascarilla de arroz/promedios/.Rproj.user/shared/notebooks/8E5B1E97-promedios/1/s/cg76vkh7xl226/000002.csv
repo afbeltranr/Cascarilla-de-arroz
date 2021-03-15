@@ -1,0 +1,5 @@
+"0","for(i in 1:1869){"
+"0","  "
+"0","  promedios[i,6] <- (espectros[i,16]+espectros[i,17])/2"
+"0","}"
+"0",""

@@ -1,0 +1,28 @@
+{
+    "id": "B1A0C33B",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1615425001642.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "id": "ebb997c71bed46249b8c0411418582cf",
+        "name": "datos2",
+        "title": "datos2",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1615424863,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1615425001642,
+    "read_only": false,
+    "read_only_alternatives": []
+}

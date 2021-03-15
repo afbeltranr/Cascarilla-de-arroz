@@ -1,0 +1,2 @@
+"0","colnames(espectros) <- t(nombres)"
+"0","head(espectros)"

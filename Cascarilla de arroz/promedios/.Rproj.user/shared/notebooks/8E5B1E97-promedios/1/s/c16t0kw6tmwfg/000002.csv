@@ -1,0 +1,7 @@
+"0","for (i in 1:1869){"
+"0","  for (j in 1:5){"
+"0","    promedios[i,j] <- (espectros[i,(3*j)-2] + espectros[i,((3*j)-2)+1] + espectros[i,(((3*j)-2)+2)])/3 "
+"0","   nombres.prom1[j] <- t(nombres)[,3*j]"
+"0","    "
+"0","  }"
+"0","}"
