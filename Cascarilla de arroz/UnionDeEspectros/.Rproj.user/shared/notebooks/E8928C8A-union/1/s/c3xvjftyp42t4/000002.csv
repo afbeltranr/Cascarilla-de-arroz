@@ -1,0 +1,6 @@
+"0",""
+"0","datos3 <- as.data.frame(datos2)"
+"0",""
+"0","write.table(datos3, ""espectros.txt"", sep=""\t"", col.names = TRUE)"
+"0","write.table(nombres, ""nombres.txt"", sep=""\t"", col.names = TRUE)"
+"0","write.table(wavenumber, ""wavenumber.txt"", sep=""\t"", col.names = TRUE)"

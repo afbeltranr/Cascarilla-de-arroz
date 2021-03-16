@@ -1,0 +1,72 @@
+---
+title: "Union de espectros en archivos separados a un solo archivo"
+author: "Andres Felipe Beltran"
+date: "3/15/2021"
+output: 
+  prettydoc::html_pretty:
+theme: hpstr
+---
+En este documento vamos a revisar paso a paso como juntar varios espectros, cada uno en un archivo .CSV diferente, y exportar un solo archivo con todos juntos para su posterior procesamiento.
+
+Es importante que el archivo .R este guardado en la misma carpeta que los archivos individuales, no es obligatorio pero facilita la operacion.
+
+Primero, creamos una lista con los nombres de los archivos que estan contenidos en la carpeta de trabajo, que tengan dentro de su nombre el `.CSV`, utilizando la funcion `list.files`
+
+
+```{r}
+nombres <- list.files(pattern = '.CSV')
+```
+
+
+podemos revisar el contenido de la lista que creamos:
+
+```{r}
+str(nombres)
+```
+Tenemos 44 nombres, que serian $(15 \; muestras \;\cdot \; 3 \; replicados) - 1 faltante = 44$ .
+
+Luego, usamos una de las funciones que aplican un loop a una lista de elementos en R.
+```{r}
+datos <- lapply(nombres, read.csv, header=FALSE)
+```
+
+Lo que va a pasar, es que a cada uno de los elementos de la lista `nombres` van a entrar como argumento de la funcion `read.csv`, y van a guardarse en el objeto `datos`, uno por uno, creando tambien una lista. Esta vez, cada posicion de la lista, ademas de tener el nombre del archivo, va a contener un `data.frame` que contiene la informacion que habia en el archivo `.CSV` que se llama con el mismo nombre que la posicion de la lista.
+
+Podemos revisar el objeto `datos` en la primera posicion de la lista:
+
+```{r}
+str(datos[[1]])
+```
+O toda la lista:
+
+```{r}
+str(datos[1:5]) # los primeros 5 elementos para no hacer tan largo el documento
+
+```
+
+Luego, podemos extraer, del primer elemento de la lista `[[1]]`, la primera columna `[,1]` los valores de numero de onda
+
+```{r}
+wavenumber <- datos[[1]][,1]
+head(wavenumber)
+```
+Luego, podemos volver a usar la funcion que aplica transformaciones definidas por otras funciones a todos los elementos de una lista,`lapply` para aplicar el operador indice `[` a todos los elementos de la lista `datos`, y dentro de indice, va a ir el argumento `2`, lo que significa que va a tomar la segunda columna de cada data.frame, y la va a guardar en las respectivas posiciones dentro de `datos2`
+
+
+```{r}
+datos2 <- lapply(datos, "[", 	2) 
+```
+
+```{r}
+str(datos2[[1]])
+```
+Ya que creamos una nueva lista, `datos2` para poder guardarlos de manera adecuada los convertimos a un `data.frame`, y a  su vez guardamos los nombres, y los valores de numero de onda.
+```{r}
+
+datos3 <- as.data.frame(datos2)
+
+write.table(datos3, "espectros.txt", sep="\t", col.names = TRUE)
+write.table(nombres, "nombres.txt", sep="\t", col.names = TRUE)
+write.table(wavenumber, "wavenumber.txt", sep="\t", col.names = TRUE)
+```
+
