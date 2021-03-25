@@ -33,11 +33,7 @@ promedios <- as.data.frame(promedios) #Convertimos el objeto promedios de matriz
 str(promedios)# Revisamos la estructura del objeto, que está vacío
 ```
 
-<<<<<<< Updated upstream
-En los datos suministrados, todos los experimentos tienen medida por triplicado excepto `"@A Room T 4 min 1.CSV"` y ` "@A Room T 4 min 2.CSV"`. Esta medida solo tiene triplicado. Debido a esto el promedio debe hacerse en tres pasos
-=======
-En los datos suministrados, todos los experimentos tienen medida por triplicado excepto `"@A Room T 4 min 1.CSV"` y ` "@A Room T 4 min 2.CSV"`. Esta medicion solo tiene duplicado. Debido a esto el promedio debe hacerse en tres pasos:
->>>>>>> Stashed changes
+En los datos suministrados, todos los experimentos tienen medida por triplicado excepto `"@A Room T 4 min 1.CSV"` y ` "@A Room T 4 min 2.CSV"`. Esta medida solo tiene duplicado. Debido a esto el promedio debe hacerse en tres pasos:
 
 # Primer paso
 
