@@ -1,0 +1,116 @@
+---
+title: "procesamiento 2"
+author: "Andres Felipe Beltran"
+date: "4/13/2021"
+output: 
+ prettydoc::html_pretty:
+    theme: cayman
+---
+
+En este documento revisaremos como organizar y preparar los archivos para el promediado. En esta carpeta solo hay espectros de muestras que necesitan ser promediadios.
+
+```{r}
+nombres <- list.files(, pattern = 'CSV')
+nombres
+```
+```{r}
+48/3
+```
+
+Ahora leemos los espectros:
+
+```{r}
+data <- lapply(nombres, read.csv, header = FALSE)
+```
+
+```{r}
+str(data[[1]])
+```
+```{r}
+wavenumber <- data[[1]][,1]
+```
+
+```{r}
+data2 <- lapply(data, '[', 2)
+```
+
+```{r}
+data2 <- as.data.frame(data2)
+dim(data2)
+names(data2) <- nombres
+```
+```{r}
+datat <- t(data2)
+colnames(datat) <- wavenumber
+```
+
+
+
+```{r}
+
+
+set.seed(0)
+
+searchGrid <-  expand.grid(Temperature = c('Room T','50C'),
+                         Time = c('2 min', '4 min' , '6 min', '8 min'),
+                         Treatment =c('A','B'))
+
+rownames.prom <- character(16)
+
+for (i in 1:16){
+rownames.prom[i] <- paste(searchGrid[i,1],searchGrid[i,2],searchGrid[i,3])  
+  
+}
+prom <- matrix(, 
+               ncol= ncol(datat), 
+               nrow = nrow(datat)/3)
+index <- vector('list',16)
+
+for(i in 1:16){
+  
+  index[[i]] <- c(which(grepl(paste0('(?=.*',
+      as.character(searchGrid[i,1]),
+        ')(?=.*',
+        as.character(searchGrid[i,2]),
+        ')(?=.*',
+        as.character(searchGrid[i,3]),
+        ')'
+ ) , rownames(datat), perl = T))
+              )
+for(j in 1:length(colnames(datat))){
+  
+
+
+prom[i,j] <- mean(c(datat[index[[i]][1],j],
+                 datat[index[[i]][2],j],
+                 datat[index[[i]][3],j]
+                      ) )
+
+}
+}
+rownames(prom) <- rownames.prom
+colnames(prom) <- wavenumber
+```
+
+
+Podemos graficar los promedios:
+
+```{r}
+for(i in 1:length(rownames(prom))){
+  plot(wavenumber,
+      prom[i,],
+       xlab = 'wave number cm-1',
+       ylab = 'absorbance a.u.',
+       xlim = c(4000,400),
+       ylim = c(0,0.1),
+       type = 'l')
+  par(new = T)
+  
+  
+}
+```
+
+```{r}
+write.table(prom,'promedios2.txt', sep = '\t')
+```
+
