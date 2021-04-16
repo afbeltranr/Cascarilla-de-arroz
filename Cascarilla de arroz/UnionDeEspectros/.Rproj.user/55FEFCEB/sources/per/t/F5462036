@@ -1,6 +1,6 @@
 {
     "id": "F5462036",
-    "path": "C:/Users/USUARIO/Desktop/Cascarilla de arroz/UnionDeEspectros/union.Rmd",
+    "path": "~/GitHub/Cascarilla de arroz/Cascarilla-de-arroz/Cascarilla de arroz/UnionDeEspectros/union.Rmd",
     "project_path": "union.Rmd",
     "type": "r_markdown",
     "hash": "1142341220",
@@ -14,7 +14,7 @@
         "source_window_id": "",
         "Source": "Source",
         "cursorPosition": "62,183",
-        "scrollLine": "61"
+        "scrollLine": "0"
     },
     "folds": "",
     "lastKnownWriteTime": 1615856834,
