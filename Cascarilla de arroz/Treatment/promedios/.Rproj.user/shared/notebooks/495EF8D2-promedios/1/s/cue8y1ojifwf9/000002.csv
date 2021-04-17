@@ -1,0 +1,4 @@
+"0","espectros <- read.table('espectros.txt') # Leemos las intensidades de los espectros"
+"0",""
+"0","nombres <- read.table('nombres.txt', sep = '\t')  # Los nombres de las muestras"
+"0","wavenumber <- read.table('wavenumber.txt') # Los nombres de las variables, los numeros de onda"

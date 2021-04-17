@@ -1,0 +1,1 @@
+"0","promedios1 <- read.table('promedios1.txt', sep = '\t', header = T)"

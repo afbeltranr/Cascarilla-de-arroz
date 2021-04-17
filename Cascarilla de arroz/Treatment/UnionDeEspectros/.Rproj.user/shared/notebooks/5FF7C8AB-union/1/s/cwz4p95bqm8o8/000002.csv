@@ -1,0 +1,1 @@
+"0","datos <- lapply(nombres, read.csv, header=FALSE)"

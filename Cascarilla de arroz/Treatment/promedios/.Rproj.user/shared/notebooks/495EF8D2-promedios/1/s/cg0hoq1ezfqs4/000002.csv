@@ -1,0 +1,2 @@
+"0","colnames(espectros) <- t(nombres) # Se asignan los caracteres en el vector nombres a los nombres de las columnas"
+"0","head(espectros)# Se imprimen los primeros elementos del data.frame"

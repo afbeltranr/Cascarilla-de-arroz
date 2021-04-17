@@ -1,0 +1,8 @@
+"0","coord <- pca.total$x"
+"0",""
+"0","plot(coord[,1],"
+"0","     coord[,2],"
+"0","     pch = 19,"
+"0","     xlab = paste('PC 1 -',as.character(varianza[1]), '%'),"
+"0","     ylab = paste('PC 2 -',as.character(varianza[2]), '%')"
+"0","     )"
