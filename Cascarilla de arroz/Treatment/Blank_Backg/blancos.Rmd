@@ -1,0 +1,62 @@
+---
+title: "blancos"
+author: "Andres Felipe Beltran"
+date: "4/16/2021"
+output: 
+  prettydoc::html_pretty:
+    theme: cayman
+  
+---
+
+
+
+```{r}
+nombres <- list.files(pattern = 'CSV')
+data.blancos <- lapply(nombres, read.csv, header = F)
+data2 <- lapply(data.blancos, '[', 2)
+str(data2[1:5])
+```
+
+```{r}
+wavenumber <- data.blancos[[1]][,1]
+```
+
+```{r}
+datos3 <- as.data.frame(data2)
+datos3.t <- t(datos3)
+rownames(datos3.t) <- nombres
+colnames(datos3.t) <- wavenumber
+```
+
+```{r}
+class <- vector('numeric')
+for(i in 1:9) {
+  
+if(grepl('(?=.*Background)', rownames(datos3.t)[i], perl = T))
+  {class[i] <- 1}else {class[i] <- 2}
+  
+}
+```
+
+
+
+
+
+```{r}
+
+library(viridis)
+for(i in 1:length(rownames(datos3.t)))
+{
+  plot(wavenumber,
+       datos3.t[i,],
+       xlab = 'wave number cm -1',
+       ylab = 'absorbance a.u.',
+       col = class[i],
+       type = 'l',
+       ylim = c(0,25),
+       
+       )
+  par(new = T)
+}
+```
+

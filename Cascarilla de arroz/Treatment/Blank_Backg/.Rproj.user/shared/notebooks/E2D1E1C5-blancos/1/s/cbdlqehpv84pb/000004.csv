@@ -1,0 +1,4 @@
+"0","datos3 <- as.data.frame(data2)"
+"0","datos3.t <- t(datos3)"
+"0","rownames(datos3.t) <- nombres"
+"0","colnames(datos3.t) <- wavenumber"
