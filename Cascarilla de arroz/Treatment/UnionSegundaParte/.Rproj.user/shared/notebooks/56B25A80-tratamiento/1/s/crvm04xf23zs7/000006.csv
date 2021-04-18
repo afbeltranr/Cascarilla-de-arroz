@@ -10,7 +10,7 @@
 "0","r3dDefaults$windowRect <- c(0,50, 1200, 1200)"
 "0","rgl.spheres(x, y, z, r = 0.005, color = 'black')"
 "0","rgl_add_axes(x, y, z, show.bbox = FALSE)"
-"0","text3d(x,y+0.01,z, rownames(coord), col=""black"", pos=3, cex = 0.5)"
+"0","text3d(x,y+0.01,z, rownames(coord), col=""black"", pos=3, cex = 1.1)"
 "0","aspect3d(1,1,1)"
 "0","# browseURL("
 "0","#   paste(""file://"", writeWebGL(dir=file.path(tempdir(), ""webGL""), "
