@@ -1,0 +1,2 @@
+"0","library(rgl)"
+"0","knitr::knit_hooks$set(webgl = hook_webgl)"

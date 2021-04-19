@@ -1,6 +1,0 @@
-"0","library(tibble)"
-"0",""
-"0","promedios1 <- column_to_rownames(promedios1 , var = 'X')"
-"2","Error: `.data` must be a data frame without row names.
-[90mRun `rlang::last_error()` to see where the error occurred.[39m
-"

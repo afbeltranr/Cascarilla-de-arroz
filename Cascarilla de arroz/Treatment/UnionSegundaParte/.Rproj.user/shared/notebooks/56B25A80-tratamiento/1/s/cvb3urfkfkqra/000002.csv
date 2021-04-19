@@ -1,0 +1,6 @@
+"0","write.table(promediosTotal, 'promediosCandi.txt', sep = '\t')
+"
+"2","Warning message:
+"
+"2","package ‘hyperSpec’ was built under R version 4.0.5 
+"

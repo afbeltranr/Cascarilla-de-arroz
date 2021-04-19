@@ -1,0 +1,2 @@
+data <- read.table('promediosCandi.txt')
+colnames(data) <- sub('X','',colnames(data))

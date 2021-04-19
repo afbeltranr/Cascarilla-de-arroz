@@ -7,7 +7,7 @@ output:
     theme: cayman
 ---
 
-En este documento revisaremos como organizar y preparar los archivos para el promediado. En esta carpeta solo hay espectros de muestras que necesitan ser promediadios.
+En este documento revisaremos como organizar y preparar los archivos para el promediado. En esta carpeta solo hay archivos con la extension `.csv` que contienen espectros de muestras que necesitan ser promediadios.
 
 ```{r}
 nombres <- list.files(, pattern = 'CSV')
@@ -69,22 +69,24 @@ index <- vector('list',16)
 for(i in 1:16){
   
   index[[i]] <- c(which(grepl(paste0('(?=.*',
-      as.character(searchGrid[i,1]),
-        ')(?=.*',
-        as.character(searchGrid[i,2]),
-        ')(?=.*',
-        as.character(searchGrid[i,3]),
-        ')'
- ) , rownames(datat), perl = T))
-              )
+                                      as.character(searchGrid[i,1]),
+                                      ')(?=.*',
+                                      as.character(searchGrid[i,2]),
+                                      ')(?=.*',
+                                       as.character(searchGrid[i,3]),
+                                      ')'
+                                        ) ,
+                              rownames(datat), 
+                              perl = T))
+                  )
   
 for(j in 1:length(colnames(datat))){
   
 
 
 prom[i,j] <- mean(c(datat[index[[i]][1],j],
-                 datat[index[[i]][2],j],
-                 datat[index[[i]][3],j]
+                    datat[index[[i]][2],j],
+                    datat[index[[i]][3],j]
                       ) )
 
 }
@@ -103,8 +105,8 @@ for(i in 1:length(rownames(prom))){
       prom[i,],
        xlab = 'wave number cm-1',
        ylab = 'absorbance a.u.',
-       xlim = c(4000,400),
-       ylim = c(0,0.1),
+       xlim = c(1700,400),
+       ylim = c(0,0.18),
        type = 'l')
   par(new = T)
   
@@ -136,38 +138,22 @@ colnames(promedios1) <- colnames(prom)
 promediosTotal <- rbind(prom,promedios1)
 promediosTotal <- promediosTotal[-c(1869)]
 
+
+
 ```
+
+# Seleccion de rango
 
 
 ```{r}
-
-
-pca.total <- prcomp(promediosTotal, scale = T, center = T)
-vp <- (pca.total$sdev)^2
-varianza <- round(vp/sum(vp)*100,2)
-varianza
+Rango1 <- promediosTotal[,1:676]
+wn.Rango1 <- wavenumber[1:676]
+head(colnames(Rango1))
+tail(colnames(Rango1))
+write.table(Rango1, 'promediosCandi.txt', sep = '\t')
 ```
 
-```{r}
-coord <- pca.total$x
-
-plot(coord[,1],
-     coord[,2],
-     pch = 19,
-     xlab = paste('PC 1 -',as.character(varianza[1]), '%'),
-     ylab = paste('PC 2 -',as.character(varianza[2]), '%')
-     )
-     
-
-text(coord[,1],
-     coord[,2],
-     rownames(coord),
-     cex = 1.1,
-     pos = 1)
-
-abline(h = 0, v = 0, lty= 2)
-```
-# Estimacion y correccion de lineas base
+# Estimacion y correccion de lineas base del nuevo rango
 
 Es posible estimar las lineas base mediante el metodo `rubberband` del paquete `hyperspec`.
 
@@ -175,14 +161,14 @@ Es posible estimar las lineas base mediante el metodo `rubberband` del paquete `
 ```{r}
 library(hyperSpec)
 
-spc <- new('hyperSpec', spc = promediosTotal, wavelength = wavenumber[-1869])
-bend <- 0.1 * wl.eval (spc, function (x) x^7+x^6+x^5+x^4+x^3+x^2, normalize.wl=normalize01)
+spc <- new('hyperSpec', spc = Rango1, wavelength = wn.Rango1)
+bend <- 0.1 * wl.eval (spc, function (x) x^6+x^5+x^4+x^3+x^2, normalize.wl=normalize01)
 
 bl <- spc.rubberband (spc+bend, noise = 1e-4, df=20)-bend
 suma <- spc+bend
 spc3 <- spc - bl
 
-plot(spc,wl.reverse = TRUE)
+plot(spc, wl.reverse = TRUE)
 plot(bl, add=TRUE, col=2,wl.reverse = TRUE)
 
 plot(suma,wl.reverse = TRUE)
@@ -193,7 +179,25 @@ corregido <- as.data.frame(spc3[1:31])
 corregido2 <- as.data.frame(corregido[,1])
 ```
 
-# PCA despues de correccion de linea base
+
+```{r}
+for(i in 1:length(rownames(corregido2))){
+  plot(wn.Rango1,
+       corregido2[i,],
+       xlab = 'wave number cm-1',
+       ylab = 'absorbance a.u.',
+       xlim = c(1700,400),
+       ylim = c(0,0.18),
+       type = 'l')
+  par(new = T)
+  
+  
+}
+```
+
+
+
+# PCA despues de correccion de linea base del nuevo rango
 ```{r}
 
 pca.bl <- prcomp(corregido2, scale =T, center = T)
@@ -205,31 +209,56 @@ varianza.bl
 ```{r}
 coord.bl <- pca.bl$x
 
+
+```
+# Creacion de clases para visualizacion
+
+Aqui vamos a crear clases segun tres parametros: Temperatura de lavado, tiempo de molienda (proporcional al tamanyo de particula) y seccion de toma de muestra en el tubo de centrifugado.
+
+Primero, creamos un vector vacio que va a contener las clases de cada muestra:
+
+```{r}
+class <- vector('character', length = length(rownames(corregido2)))
+str(class)
+```
+Ahora, utilizando las estructuras de control de flujo `if` y `else`, en conjunto con la funcion de emparejamiento de patrones y reemplazo `grepl` podemos, a partir de los nombres de las muestras crear clases para la correcta visualizacion de los datos.
+
+```{r}
+for(i in 1:length(rownames(coord.bl)))
+
+if(
+    grepl('(?=.*@)', rownames(coord.bl)[i], perl = T)
+) {class[i] <- 'black'}else{
+      class[i] <- 'red'
+}
+class
+
+rownames(coord.bl)
+
+```
+
+Ahora tenemos como identificar los espectros por zona de muestreo:
+
+```{r}
 plot(coord.bl[,1],
      coord.bl[,2],
      pch = 19,
      xlab = paste('PC 1 -',as.character(varianza.bl[1]), '%'),
-     ylab = paste('PC 2 -',as.character(varianza.bl[2]), '%')
+     ylab = paste('PC 2 -',as.character(varianza.bl[2]), '%'),
+     col = class
      )
      
 
-text(coord.bl[,1],
-     coord.bl[,2],
-     rownames(coord.bl),
-     cex = 1.1,
-     pos = 1)
 
 abline(h = 0, v = 0, lty= 2)
 ```
 
-
-# Using just the lignin range.
-
+Para 
 
 # 3D visualization
 
 
-```{r}
+```{r echo = FALSE}
 rgl_init <- function(new.device = FALSE, bg = "white", width = 640) { 
   if( new.device | rgl.cur() == 0 ) {
     rgl.open()
@@ -280,7 +309,18 @@ rgl_add_axes <- function(x, y, z, axis.col = "black",#52.20 42.79  3.75
 }
 ```
 
-```{r}
+
+```{r echo=FALSE}
+options(rgl.useNULL=TRUE) # for Rstudio versions older than 1.2
+```
+
+
+```{r setup0, echo=FALSE}
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl) # To Embed an interactive 3D plot with rgl
+```
+
+```{r  webgl=TRUE, results='hide'}
 library(rgl)
 x  <- coord.bl[,1]
 y  <- coord.bl[,2]
@@ -291,9 +331,9 @@ z  <- coord.bl[,3]
 
 rgl_init()
 r3dDefaults$windowRect <- c(0,50, 1200, 1200)
-rgl.spheres(x, y, z, r = 0.005, color = 'black')
+rgl.spheres(x, y, z, r = 0.5, color =class)
 rgl_add_axes(x, y, z, show.bbox = FALSE)
-text3d(x,y+0.01,z, rownames(coord), col="black", pos=3, cex = 1.1)
+text3d(x,y+0.01,z, rownames(coord.bl), col="black", pos=3, cex = 0.05)
 aspect3d(1,1,1)
 # browseURL(
 #   paste("file://", writeWebGL(dir=file.path(tempdir(), "webGL"), 
@@ -304,3 +344,72 @@ aspect3d(1,1,1)
 
 ```
 
+# derivatizacion de espectros
+```{r}
+library(prospectr)
+
+w2 <- 40
+sg <- matrix(ncol = ncol(corregido2)-w2, nrow= nrow(corregido2))
+
+sg <- as.data.frame(sg) 
+# for (i in 1:31){
+
+sg<- savitzkyGolay(X = corregido2
+                        ,m = 2,
+                        p = 3,
+                        w = w2+1,
+                        delta.wav=2)
+# }
+# colnames(sg) <- colnames( savitzkyGolay(X = corregido2[1,]
+#                         ,m = 2,
+#                         p = 3,
+#                         w = w2+1,
+#                         delta.wav=2))
+rownames(sg) <- rownames(corregido2)
+
+
+for(i in 1:length(rownames(sg))){
+  
+  plot(as.numeric(colnames(sg)),
+       sg[i,],
+       xlab = 'wave number cm-1',
+       ylab = '2nd derivative of abs',
+       xlim = c(1700,400),
+        ylim = c(-1e-04,1e-04),
+       type = 'l',
+       col = class[i])
+  par(new = T)
+  
+  
+}
+
+
+```
+
+# Analisis multivariado de la segunda derivada
+
+```{r}
+pca.bl.2d <- prcomp(sg, scale=T, center = T)
+
+coord.bl.2d <- pca.bl.2d$x
+
+plot(coord.bl[,1],
+     coord.bl[,2],
+     pch = 19,
+     xlab = paste('PC 1 -',as.character(varianza.bl[1]), '%'),
+     ylab = paste('PC 2 -',as.character(varianza.bl[2]), '%'),
+     col = class
+     )
+     
+
+
+abline(h = 0, v = 0, lty= 2)
+```
+
+
+
+
+# Referencias
+
+
+* Lin, S. Y., & Dence, C. W. (Eds.). (2012). Methods in lignin chemistry. Springer Science & Business Media.
