@@ -3,7 +3,7 @@
     "path": "~/GitHub/Cascarilla de arroz/Cascarilla-de-arroz/Cascarilla de arroz/Treatment/UnionSegundaParte/Shiny/App.R",
     "project_path": "App.R",
     "type": "r_source",
-    "hash": "4175124959",
+    "hash": "4089944611",
     "contents": "",
     "dirty": false,
     "created": 1618780912944.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "102,0",
-        "scrollLine": "98"
+        "cursorPosition": "173,60",
+        "scrollLine": "0"
     },
     "folds": "125|33|127|2|\n130|32|146|2|\n",
-    "lastKnownWriteTime": 1618799065,
+    "lastKnownWriteTime": 1619097221,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1618799065029,
+    "last_content_update": 1619097221966,
     "read_only": false,
     "read_only_alternatives": []
 }

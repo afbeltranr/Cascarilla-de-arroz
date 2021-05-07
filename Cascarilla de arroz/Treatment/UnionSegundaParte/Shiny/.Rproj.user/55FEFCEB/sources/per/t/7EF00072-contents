@@ -170,9 +170,9 @@ return(datos)
     w2 <-reactive({as.numeric(input$window)})
     
     
-    sg <- reactiveValues(a = matrix(ncol= as.numeric(ncol(corregido2)-w2()-1),
+    sg <-matrix(ncol= as.numeric(ncol(corregido2)-w2()-1),
                                     nrow= nrow (corregido2))
-    )
+  
 
   
     # for (i in 1:nrow(data())){

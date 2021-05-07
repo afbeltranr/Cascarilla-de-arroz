@@ -114,11 +114,16 @@ for(i in 1:length(rownames(prom))){
 }
 ```
 
-Podemos importar los espectros de la primera parte ya promediados para analizar todo en conjunto:
+Luego de guardar en una tabla los promedios de esta segunda parte:
 
 ```{r}
 write.table(prom,'promedios2.txt', sep = '\t')
 ```
+
+
+
+
+Podemos importar los espectros de la primera parte ya promediados para analizar todo en conjunto:
 
 
 ```{r}
@@ -136,7 +141,7 @@ dim(promedios1)
 dim(prom)
 colnames(promedios1) <- colnames(prom)
 promediosTotal <- rbind(prom,promedios1)
-promediosTotal <- promediosTotal[-c(1869)]
+promediosTotal <- promediosTotal[-1869]
 
 
 
@@ -158,7 +163,7 @@ write.table(Rango1, 'promediosCandi.txt', sep = '\t')
 Es posible estimar las lineas base mediante el metodo `rubberband` del paquete `hyperspec`.
 
 
-```{r}
+```{r, message=FALSE}
 library(hyperSpec)
 
 spc <- new('hyperSpec', spc = Rango1, wavelength = wn.Rango1)
@@ -209,11 +214,10 @@ varianza.bl
 ```{r}
 coord.bl <- pca.bl$x
 
-
 ```
-# Creacion de clases para visualizacion
+# Creación de clases para visualizacion
 
-Aqui vamos a crear clases segun tres parametros: Temperatura de lavado, tiempo de molienda (proporcional al tamanyo de particula) y seccion de toma de muestra en el tubo de centrifugado.
+Aqui vamos a crear clases segun tres parametros: Temperatura de lavado, tiempo de molienda (proporcional al tamaño de partícula) y seccion de toma de muestra en el tubo de centrifugado.
 
 Primero, creamos un vector vacio que va a contener las clases de cada muestra:
 
