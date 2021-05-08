@@ -205,7 +205,7 @@ for(i in 1:length(rownames(corregido2))){
 # PCA despues de correccion de linea base del nuevo rango
 ```{r}
 
-pca.bl <- prcomp(corregido2, scale =T, center = T)
+pca.bl <- prcomp(corregido2, scale =F, center = T)
 vp.bl <- (pca.bl$sdev)^2
 varianza.bl <- round(vp.bl/sum(vp.bl)*100, 2)
 varianza.bl
@@ -227,13 +227,20 @@ str(class)
 ```
 Ahora, utilizando las estructuras de control de flujo `if` y `else`, en conjunto con la funcion de emparejamiento de patrones y reemplazo `grepl` podemos, a partir de los nombres de las muestras crear clases para la correcta visualizacion de los datos.
 
+Primero la clase que corresponde a la parte del tubo que se toma la muestra, que esta diferenciada de manera que los espectros que se cargaron de la carpeta anterior, contenidos en el objeto `promedios1`, que conservan un `@` en su nombre original, son de la parte ___ del tubo y llevan el color negro. 
+
+Aquellos que fueron suministrados por segunda vez, y estan guardados en la carpeta que contiene este informe, no contienen el `@` en su nombre debido al algoritmo de selección descrito anteriormente, corresponden a la parte ____ del tubo y llevan el color rojo.
+
+
 ```{r}
 for(i in 1:length(rownames(coord.bl)))
+{
 
-if(
-    grepl('(?=.*@)', rownames(coord.bl)[i], perl = T)
-) {class[i] <- 'black'}else{
-      class[i] <- 'red'
+    if(
+      grepl('(?=.*@)', rownames(coord.bl)[i], perl = T)
+    ) {class[i] <- 'black'}else{
+        class[i] <- 'red'
+}
 }
 class
 
@@ -241,15 +248,50 @@ rownames(coord.bl)
 
 ```
 
+También podemos diferenciar las muestras por el tiempo de molienda, y a su vez por temperatura
+
+
+```{r}
+pch <- vector('numeric', length = length(rownames(coord.bl)))
+pchvalues <- c(16,1,17,2,15,0,18,5)
+indexpch <- vector('list',8)
+
+for(i in 1:8){
+  
+  indexpch[[i]] <- c(which(grepl(paste0('(?=.*',
+                                      as.character(searchGrid[i,1]),
+                                      ')(?=.*',
+                                      as.character(searchGrid[i,2]),
+                                      ')'
+                                        ) ,
+                              rownames(coord.bl), 
+                              perl = T))
+                  )
+}
+
+
+  for(j in 1:8){
+    
+
+     
+     pch[indexpch[[j]]] <- pchvalues[j]
+     
+    
+  }
+
+```
+
+
 Ahora tenemos como identificar los espectros por zona de muestreo:
 
 ```{r}
 plot(coord.bl[,1],
      coord.bl[,2],
-     pch = 19,
+     pch = pch,
      xlab = paste('PC 1 -',as.character(varianza.bl[1]), '%'),
      ylab = paste('PC 2 -',as.character(varianza.bl[2]), '%'),
      col = class
+   
      )
      
 
