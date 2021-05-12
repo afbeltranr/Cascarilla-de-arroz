@@ -1,0 +1,8 @@
+"0","data2 <- as.data.frame(data2)"
+"0","dim(data2)"
+"1","[1]"
+"1"," 1869"
+"1","  120"
+"1","
+"
+"0","names(data2) <- nombres"
