@@ -1,0 +1,37 @@
+---
+title: "prueba"
+author: "Andres Felipe Beltran"
+date: "5/13/2021"
+output: html_document
+---
+En esta prueba revisamos el espectro `@A_SS_50C_UF1_1(1).CSV` junto con sus réplicas para saber si lo podemos obviar y usar su archivo repetido `@A_SS_50C_UF1_1(1).CSV`
+
+Importamos las 4 réplicas y las graficamos:
+
+
+```{r}
+nombres <- list.files(, pattern = '.CSV')
+data <- lapply(nombres, read.csv, header = FALSE)
+wavenumber <- data[[1]][,1]
+data2 <- lapply(data, '[', 2)
+data2 <- as.data.frame(data2)
+datat <- t(data2)
+colnames(datat) <- wavenumber
+rownames(datat) <- nombres
+```
+
+```{r}
+for(i in 1:4){
+  
+  plot(wavenumber,
+    datat[i,],
+    ylim = c(0, 0.015),
+    xlim = c(1700,400),
+    type = 'l',
+    col = c(1,2,2,2)[i])
+  par(new = T)
+}
+
+```
+
+Efectivamente los elementos 1 y 2 son idénticos, puede usarse cual quiera de los dos.
