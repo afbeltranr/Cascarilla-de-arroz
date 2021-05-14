@@ -1,0 +1,3 @@
+"0","ExpSS <- read.table('SSexp.txt')"
+"0","colnames(ExpSS) <-as.numeric( sub('X', '', colnames(ExpSS)) )"
+"0","ExpSS <- ExpSS[,-1869]"

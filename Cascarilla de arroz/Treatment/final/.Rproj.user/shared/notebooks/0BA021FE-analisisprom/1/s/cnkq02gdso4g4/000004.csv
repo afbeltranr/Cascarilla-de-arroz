@@ -1,0 +1,2 @@
+"0","ExpT <- read.table('promediosCandi.txt')"
+"0","colnames(ExpT) <-as.numeric( sub('X', '', colnames(ExpT)) )"

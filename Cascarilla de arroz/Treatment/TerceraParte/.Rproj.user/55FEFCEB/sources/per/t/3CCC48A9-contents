@@ -319,6 +319,6 @@ plotScores(mdaPCA$res$cal, show.labels = TRUE)
 Ya que mediante PCA para estas muestras en específico, no se obserban agrupamientos notorios, podemos exportar estos resultados y compararlos con los resultados de los experimentos anteriores:
 
 ```{r}
-
+write.table(prom, 'SSexp.txt' , sep = '\t')
 ```
 

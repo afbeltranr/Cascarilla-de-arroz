@@ -1,0 +1,2 @@
+"0","data <- data[, 1:676]"
+"0","wn <- as.numeric( colnames(data[1:676]))"

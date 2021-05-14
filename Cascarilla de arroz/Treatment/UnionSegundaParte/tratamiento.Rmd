@@ -155,7 +155,7 @@ Rango1 <- promediosTotal[,1:676]
 wn.Rango1 <- wavenumber[1:676]
 head(colnames(Rango1))
 tail(colnames(Rango1))
-write.table(Rango1, 'promediosCandi.txt', sep = '\t')
+write.table(promediosTotal, 'promediosCandi.txt', sep = '\t')
 ```
 
 # Estimacion y correccion de lineas base del nuevo rango
