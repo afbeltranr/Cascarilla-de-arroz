@@ -241,7 +241,7 @@ plot(coord.bl.2d[,1],
      ylab = paste('PC 2 -',as.character(varianza.bl.2d[2]), '%'),
      col = res.hk.sg$cluster
      )
-abline()
+abline(h = 0, v =  0, lty=2X)
 ```
 
 
