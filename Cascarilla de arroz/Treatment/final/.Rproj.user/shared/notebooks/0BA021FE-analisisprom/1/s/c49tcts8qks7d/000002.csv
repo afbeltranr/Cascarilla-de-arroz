@@ -1,0 +1,8 @@
+"0","dd <- dist(corregido2, method = ""euclidean"")"
+"0","hc <- hclust(dd, method = ""ward.D2"")"
+"0","plot(hc, "
+"0","     "
+"0","     main = ""Cluster dendrogram"", "
+"0","      xlab = 'sample', "
+"0","     ylab = ""Height"","
+"0","     cex = 0.6)"
