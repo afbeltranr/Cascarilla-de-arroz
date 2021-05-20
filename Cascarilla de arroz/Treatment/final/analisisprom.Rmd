@@ -1,5 +1,5 @@
 ---
-title: "Análisis de espectros promedidados"
+title: "Data analysis tools applied to the evaluation of the effect of density fractionation on silicon content of rice husk."
 author: "Andres Felipe Beltran"
 date: "5/13/2021"
 output:
@@ -9,27 +9,31 @@ params:
   gallery = TRUE
 ---
 
-# Introducción
 
-En este documento revisamos el procedimiento para procesar mediante herramientas de análisis de datos los espectros promedidados resultantes de los experimentos que evalúan el efecto de la extracción a diferentes temperaturas, y distintas fuerzas iónicas.
+# Introduction
+
+In this document we review the procedure to process the averaged spectra resulting from experiments that evaluate the effect of extraction at different temperatures and different ionic strengths using data analysis tools. 
+
+# Loading data to R
 
 
-# Importando datos a R
+First, we import data from each averaging stage: 
 
-Primero, importamos los datos resultantes de cada etapa de promediado:
 
 ```{r}
 ExpT <- read.table('promediosCandi.txt')
 colnames(ExpT) <-as.numeric( sub('X', '', colnames(ExpT)) )
 ```
 
-En el chunk anterior, se cargaron los espectros correspondientes al primer set de muestras, el cual contiene 16 muestras y se evalúan:
 
-* Tiempo de molienda
-* Temperatura de extracción
-* Sección de la toma de muestra, codificada con un @ para la parte inferior del tubo.
+In the chunk above, spectra corresponding to the first set of samples were loaded to R, in which there are 16 samples and the following variables are evaluated:
 
-Ahora cargamos los espectros del experimento con solución salina:
+* Milling time
+* Extraction temperature
+* sampling zone  (whether the sample is taken from the upper half or the lower half of the pellet formed after centrifugation)
+
+Now, we can load to R the second half of the experiments, in which the ionic strength of the extraction solution is evaluated.
+
 
 ```{r}
 ExpSS <- read.table('SSexp.txt')
@@ -38,15 +42,16 @@ ExpSS <- ExpSS[,-1869]
 ```
 
 
-Luego, podemos juntar todos en un solo set de datos:
+Then, once we have loaded all the information we needed into R, we can create a new tidy `data.frame` binding rows of `ExpT` and `ExpSS`:
 
 ```{r}
 data <- rbind(ExpT,ExpSS)
 ```
 
-## Graficando los datos importados
+## Plotting imported data.
 
-podemos graficar todos los espectros contenidos en `data`:
+Employing a for loop, we can plot each row of the data.frame `data` against the names of the columns of `data`.  This will plot absorbance data versus the frequency of incident light in $cm-1$ :
+
 
 ```{r}
 for(i in 1:71){
@@ -56,28 +61,52 @@ for(i in 1:71){
        ylim = c(0,0.35),
        xlim =  c(1700, 400),
        ylab = 'absorbance (a.u.)',
-       xlab = 'wave number (cm-1)' )
+       xlab = expression("Wave number (" ~ cm^-1 ~ ")" ))
   par(new = T)
 }
+rect(1065,0,1025,1, col= rgb(0.55,0.83,0.78,alpha=0.5), border = NA)
+rect(465,0,445,1, col= rgb(0.55,0.83,0.78,alpha=0.5), border = NA)
+rect(789,0,809,1, col= rgb(0.55,0.83,0.78,alpha=0.5), border = NA)
 ```
 
-# Análisis de datos
+# Data analysis
 
-## Selección de rango
 
-Una vez tenemos todas las muestras juntas, podemos seleccionar el rango de interés,  para no añadir el ruido debido a la corrección atmosfésrica, y a su vez, solo tomar las bandas características a los modos vibracionales de los enlaces Si-O, y los enlaces aromáticos de los monómeros de la lignina (Heitner 2010).
+## Range selection
+
+Once we have joined all samples' spectra, we can select a region of interest, to:
+
+* Avoid processing instrumental noise, such as negative values due to atmospheric suppression procedure.
+* Analyze only characteristic bands due to Silicon-Oxygen bonds interacting with incident light, such as those bands around 455, 799, and 1045 $1045 \; cm^{-1}$  (Zemnukhova 2015). and those for lignin guaiacyl and syringyl groups from 1700 to 742 $cm^{-1}$ (Heitner 2010).
 
 ```{r}
 colnames(data)[c(1,676)]
 ```
+Once we know from which position to which position of the `data,frame` the region of interest is, we can create a subset using the following command:  
+
 ```{r}
 data <- data[, 1:676]
+```
+
+and save a vector containing the corresponding frecuencies for our new region of interest:
+
+```{r}
 wn <- as.numeric( colnames(data[1:676]))
 ```
 
-## Corrección de línea base
+## Baseline estimation and correction.
 
-Podemos eliminar la variabilidad por ruido instrumental de los espectros mediante el pre-tratamiento de estimación y corrección de línea base, mediante el método `rubberband` disponible en el paquete `hyperspec` de `R`, desarrollado para el análisis de imágenes hiper-espectrales.
+We can get rid of variability given by instrumental noise, employing pre-treatments such as estimation and correction of spectral baseline.
+This can be done by using the `rubberband` method available in the `hyperspec` R package:
+
+First,  we create new `hyperSpec` object called `spc`:
+
+```{r}
+library(hyperSpec)
+spc <- new('hyperSpec', spc = data, wavelength = wn)
+```
+
+Then we can use the rubberband method to estimate the spectral background and execute the baseline correction. This method was developed for spectra wich show increasing background signal along the abscissa. 
 
 ```{r message=FALSE}
 library(hyperSpec)
@@ -241,7 +270,7 @@ plot(coord.bl.2d[,1],
      ylab = paste('PC 2 -',as.character(varianza.bl.2d[2]), '%'),
      col = res.hk.sg$cluster
      )
-abline(h = 0, v =  0, lty=2X)
+abline(h = 0, v =  0, lty=2)
 ```
 
 
@@ -255,6 +284,9 @@ fviz_cluster(res.hk.sg,
 ```
 
 # Referencias
+
+
+* Zemnukhova, L. A., Panasenko, A. E., Artem'yanov, A. P., & Tsoy, E. A. (2015). Dependence of porosity of amorphous silicon dioxide prepared from rice straw on plant variety. BioResources, 10(2), 3713-3723.
 
 * Heitner, Cyril, Don Dimmel, and John Schmidt, eds. Lignin and lignans: advances in chemistry. CRC press, 2010, pp 122.
 * Varmuza, K., & Filzmoser, P. (2016). Introduction to multivariate statistical analysis in chemometrics. CRC press.
