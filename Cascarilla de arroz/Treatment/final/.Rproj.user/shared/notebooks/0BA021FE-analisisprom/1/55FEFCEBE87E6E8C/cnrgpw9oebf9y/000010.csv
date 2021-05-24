@@ -1,0 +1,3 @@
+"0","names <- as.character(rownames(df))"
+"0","dim(names) <- length(rownames(df))"
+"0","metadata <- data.frame( row.names = names, fraction = as.factor(density), ionic.strength = as.factor(ionic))"

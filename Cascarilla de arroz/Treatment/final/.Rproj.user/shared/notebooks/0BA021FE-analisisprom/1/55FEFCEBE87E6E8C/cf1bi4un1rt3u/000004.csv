@@ -1,0 +1,8 @@
+"0","ionic.index <- logical(71)"
+"0","ionic <- character(71)"
+"0","for (i in 1:71) {"
+"0","  ionic.index[i] <- grepl('SS',rownames(df)[i],perl = T) "
+"0",""
+"0","  if(ionic.index[i] == TRUE){ionic[i] <- 'Hi'}else{ionic[i] <- 'low'}"
+"0",""
+"0","} "
