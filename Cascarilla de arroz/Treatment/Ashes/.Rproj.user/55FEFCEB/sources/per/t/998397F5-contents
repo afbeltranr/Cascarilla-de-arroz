@@ -31,4 +31,4 @@ t.test(L2.4, L6.8)
 ```
 A un nivel de significancia $\alpha = 0.05$ se puede afirmar mediante la prueba de t, que hay una diferencia significativa en la media del contenido de cenizas entre grupos de distintas fracciones (superior e inferior). En otras palabras esta diferencia en contenido de cenizas se da por la diferencia entre los grupos de muestras, y no por azar.
 
-Por otro lado, para diferenciar entre tiempos de molienda de 2-4 min y de 6-8 min en un nivel de significancia $\alpha = 0.05$ ninguna de las dos fracciones presenta difenrencia significativa.
+Por otro lado, para diferenciar entre tiempos de molienda de 2-4 min y de 6-8 min en un nivel de significancia $\alpha = 0.05$ ninguna de las dos fracciones presenta diferencia significativa.

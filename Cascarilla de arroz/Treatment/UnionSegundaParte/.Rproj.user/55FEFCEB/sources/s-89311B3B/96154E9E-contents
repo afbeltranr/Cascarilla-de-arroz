@@ -3,8 +3,7 @@ title: "procesamiento 2"
 author: "Maria Candelaria Dorta Delgado - Andres Felipe Beltran"
 date: "4/13/2021"
 output: 
- prettydoc::html_pretty:
-    theme: cayman
+ rmdformats::downcute
 ---
 
 En este documento revisaremos como organizar y preparar los archivos para el promediado. En esta carpeta solo hay archivos con la extension `.csv` que contienen espectros de muestras que necesitan ser promediadios.
@@ -232,6 +231,18 @@ for(i in 1:length(rownames(corregido2))){
 }
 ```
 
+# Hierarchical clustering
+
+```{r}
+df <- corregido2
+library(factoextra)
+res.hk <-hkmeans(df, 2)
+names(res.hk)
+```
+```{r}
+fviz_dend(res.hk, cex = 0.6, palette = "jco", 
+          rect = TRUE, rect_border = "jco", rect_fill = TRUE)
+```
 
 
 # PCA despues de correccion de linea base del nuevo rango
