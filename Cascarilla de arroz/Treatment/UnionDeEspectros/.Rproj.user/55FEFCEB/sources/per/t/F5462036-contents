@@ -3,8 +3,7 @@ title: "Union de espectros en archivos separados a un solo archivo"
 author: "Andres Felipe Beltran"
 date: "3/15/2021"
 output: 
-  prettydoc::html_pretty:
-theme: hpstr
+   rmdformats::downcute
 ---
 En este documento vamos a revisar paso a paso como juntar varios espectros, cada uno en un archivo .CSV diferente, y exportar un solo archivo con todos juntos para su posterior procesamiento.
 

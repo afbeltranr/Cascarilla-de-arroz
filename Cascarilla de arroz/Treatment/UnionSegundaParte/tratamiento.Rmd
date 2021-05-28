@@ -1,10 +1,9 @@
 ---
 title: "procesamiento 2"
-author: "Andres Felipe Beltran"
+author: "Maria Candelaria Dorta Delgado - Andres Felipe Beltran"
 date: "4/13/2021"
 output: 
- prettydoc::html_pretty:
-    theme: cayman
+ rmdformats::downcute
 ---
 
 En este documento revisaremos como organizar y preparar los archivos para el promediado. En esta carpeta solo hay archivos con la extension `.csv` que contienen espectros de muestras que necesitan ser promediadios.

@@ -1,10 +1,9 @@
 ---
 title: "Procesamiento 3"
-author: "Andres Felipe Beltran"
+author: "Maria Candelaria Dorta Delgado - Andres Felipe Beltran"
 date: "5/11/2021"
 output:
-   prettydoc::html_pretty:
-     theme: cayman
+   rmdformats::downcute
 ---
 
 En este documento se presenta el flujo de trabajo utilizado para procesar los espectros compartidos en las carpetas `3_T 50` y `3 SST50`
@@ -215,15 +214,38 @@ colnames(prom) <- wavenumber
 
 Una vez calculados, podemos graficar los promedios:
 
+Podemos diferenciar los espectros de las muestras a las cuales se les realizo la extracción con solución salina mediante una revisión
+
 ```{r}
-for(i in 1:length(rownames(prom))){
+NaCl <- vector('character', length(rownames(prom)))
+
+for(i in 1:40){
+  
+ if(grepl('SS', rownames(prom)[i],perl =T)){NaCl[i]<- 'blue'}
+  else{NaCl[i]<- 'black'}
+  
+}
+
+
+indexSS <- vector('logical',40)
+
+ indexSS<-which(grepl('SS', rownames(prom),perl =T))
+  
+
+
+```
+
+
+```{r}
+for(i in 1:40){
   plot(wavenumber,
       prom[i,],
        xlab = 'wave number cm-1',
        ylab = 'absorbance a.u.',
-       xlim = c(1700,400),
-       ylim = c(0,0.15),
-       type = 'l')
+       xlim = c(3900,400),
+       ylim = c(0,0.12),
+       type = 'l',
+       col = NaCl[i])
   par(new = T)
 
   

@@ -1,0 +1,34 @@
+---
+title: "Ashes content analysis"
+author: "Andres Felipe Beltran"
+date: "5/27/2021"
+output: 
+  rmdformats::downcute
+  
+---
+
+2-4 min:
+
+```{r}
+U2.4 <- c(12.63,12.36, 13.87, 13.87, 13.62, 13.79)
+L2.4 <- c(10.96,11.11, 10.86, 10.48, 10.66, 13.79)
+t.test(U2.4, L2.4)
+```
+6-8 min:
+
+```{r}
+U6.8 <- c(14.01,13.81,13.33,14.09,12.65)
+L6.8 <- c(10.38, 9.83,9.79, 10.67, 10.38)
+t.test(U6.8,L6.8)
+```
+Para revisar entre tiempos de molienda, puede evaluarse la diferencia entre las medias manteniendo la fraccion constante:
+
+```{r}
+t.test(U2.4, U6.8)
+```
+```{r}
+t.test(L2.4, L6.8)
+```
+A un nivel de significancia $\alpha = 0.05$ se puede afirmar mediante la prueba de t, que hay una diferencia significativa en la media del contenido de cenizas entre grupos de distintas fracciones (superior e inferior). En otras palabras esta diferencia en contenido de cenizas se da por la diferencia entre los grupos de muestras, y no por azar.
+
+Por otro lado, para diferenciar entre tiempos de molienda de 2-4 min y de 6-8 min en un nivel de significancia $\alpha = 0.05$ ninguna de las dos fracciones presenta difenrencia significativa.

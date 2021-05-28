@@ -1,6 +1,6 @@
 ---
 title: "Data analysis tools applied to the evaluation of the effect of density fractionation on silicon content of rice husk."
-author: "Andres Felipe Beltran"
+author: "Maria Candelaria Dorta Delgado - Andres Felipe Beltran"
 date: "5/13/2021"
 output:
    rmdformats::downcute:
@@ -219,13 +219,57 @@ First we need to create metadata for samples. In this case, it will be a `data.f
 * Whether the sample is taken from a low or high density fraction
 * Whether the sample was extracted in a low or high ionic strengh solution
 
+First, we identificate which samples have `high` or `low` ionic strenght in their extraction solution:
+
+```{r}
+ionic.index <- logical(71)
+ionic <- character(71)
+for (i in 1:71) {
+  ionic.index[i] <- grepl('SS',rownames(df)[i],perl = T) 
+
+  if(ionic.index[i] == TRUE){ionic[i] <- 'Hi'}else{ionic[i] <- 'low'}
+
+} 
+```
+
+
+```{r}
+density.index <- logical(71)
+density <- character(71)
+for (i in 1:71) {
+  density.index[i] <- grepl('(?=.*UF|@)',rownames(df)[i],perl = T) 
+
+  if(density.index[i] == TRUE){density[i] <- 'Low'}else{density[i] <- 'Hi'}
+
+} 
+density
+```
+
 
 ```{r}
 names <- as.character(rownames(df))
 dim(names) <- length(rownames(df))
-metadata <- data.frame( row.names = names, fraction = rep(NA,71), ionic.strenght = rep(NA,71))
+metadata <- data.frame( row.names = names, fraction = as.factor(density), ionic.strength = as.factor(ionic))
 ```
 
+```{r message= FALSE}
+library(ropls)
+df.opls <- opls(df, predI = 4)
+```
+```{r}
+densityFc <- metadata[,'fraction']
+plot(df.opls, typeVc = 'x-score', parAsColFcVn = densityFc, parEllipsesL =T)
+ionicFc <- metadata[,'ionic.strength']
+plot(df.opls, typeVc = 'x-score', parAsColFcVn = ionicFc, parEllipsesL =T)
+```
+
+```{r}
+density.plsda <- opls(df, densityFc)
+```
+
+```{r}
+ionic.plsda <- opls(df, ionicFc)
+```
 
 ## Análisis exploratorio con corrección de línea base y cálculo de segunda derivada.
 
@@ -261,6 +305,15 @@ for(i in 1:length(rownames(sg))){
   
 ```
 
+```{r}
+
+```
+
+
+
+```{r}
+sg.plsda <- opls(sg, ionicFc)
+```
 
 
 ```{r meesage = FALSE}
@@ -308,6 +361,9 @@ plot(coord.bl.2d[,1],
      col = res.hk.sg$cluster
      )
 abline(h = 0, v =  0, lty=2)
+```
+```{r}
+
 ```
 
 
