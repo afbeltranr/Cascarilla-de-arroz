@@ -231,6 +231,18 @@ for(i in 1:length(rownames(corregido2))){
 }
 ```
 
+# Hierarchical clustering
+
+```{r}
+df <- corregido2
+library(factoextra)
+res.hk <-hkmeans(df, 2)
+names(res.hk)
+```
+```{r}
+fviz_dend(res.hk, cex = 0.6, palette = "jco", 
+          rect = TRUE, rect_border = "jco", rect_fill = TRUE)
+```
 
 
 # PCA despues de correccion de linea base del nuevo rango
