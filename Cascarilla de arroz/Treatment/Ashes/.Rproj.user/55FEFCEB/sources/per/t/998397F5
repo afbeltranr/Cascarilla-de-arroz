@@ -3,7 +3,7 @@
     "path": "~/GitHub/Cascarilla de arroz/Cascarilla-de-arroz/Cascarilla de arroz/Treatment/Ashes/ashes.rmd",
     "project_path": "ashes.rmd",
     "type": "r_markdown",
-    "hash": "2079948469",
+    "hash": "4061658428",
     "contents": "",
     "dirty": false,
     "created": 1622138045383.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "33,171",
-        "scrollLine": "32"
+        "cursorPosition": "46,38",
+        "scrollLine": "36"
     },
     "folds": "",
-    "lastKnownWriteTime": 1622168362,
+    "lastKnownWriteTime": 1622585583,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1622168362251,
+    "last_content_update": 1622585583911,
     "read_only": false,
     "read_only_alternatives": []
 }

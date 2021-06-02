@@ -1,11 +1,53 @@
 ---
 title: "Ashes content analysis"
-author: "Andres Felipe Beltran"
+author: "Maria Candelaria Dorta Delgado- Andres Felipe Beltran"
 date: "5/27/2021"
 output: 
   rmdformats::downcute
   
 ---
+In this document we can see the statistical analysis applied to the investigation question: Are there significative differences in ash content between several groups of rice husk samples?
+
+#Ashes 1: Difference between no treatment and water decantation at different temperatures.
+
+Since there are 8 samples in `control.group` And 8 samples in the `treatment.group` we can use the function `t.test` to do a comparison test and see if there is a statistical difference between the ash content in these two groups as follows:
+
+* First, we define `control.group`:
+
+```{r}
+control.group <- c(18.62, 17.51,18.19,17.62,18.58,17.69,17.62,17.38)
+```
+
+Then, we define `treatment.group` as the lower fraction since is the fraction that has the same sample size and from which we have the most information :
+
+```{r}
+treatment.group <- c(15,14,16,13,15,14,11,13)
+```
+
+
+
+
+Now we can compare the means of these grups using the `t.test()` function:
+
+```{r}
+t.test(control.group, treatment.group)
+```
+
+We can create a group with the samples taken from the upper fraction of the tube:
+
+
+```{r}
+upper.fraction <- c(15,15,12,11,10)
+```
+
+
+Also, within the `treatment.group` we can compare between density fractions as follows:
+
+```{r}
+t.test(treatment.group, upper.fraction)
+```
+
+# Ashes 2
 
 2-4 min:
 

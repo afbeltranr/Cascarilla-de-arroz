@@ -1,0 +1,162 @@
+tiff('FirstExperimentSpectra.tiff',
+     
+     res = 800)
+# win.graph()
+win.graph()
+for(i in 1:length(rownames(corregido2))){
+  plot(wn.Rango1,
+       corregido2[i,],
+       axes=F,
+        xlab = '',
+        ylab = '',
+       xlim = c(1700,400),
+       ylim = c(0,0.18),
+       type = 'l',
+       col = class[i])
+  par(new = T)
+  
+  
+}
+axis(1)
+axis(2)
+box()
+title(main="",
+    xlab=expression(paste("Wave number (cm"^"-1",")")),
+    ylab="Absorbance (a.u.)",
+)
+
+
+rect(1065,0,1025,1, col= rgb(0.302,0.686,0.29,alpha=0.2), border = NA)
+rect(465,0,445,1, col= rgb(0.302,0.686,0.29,alpha=0.2), border = NA)
+rect(789,0,809,1, col= rgb(0.302,0.686,0.29,alpha=0.2), border = NA)
+
+
+
+
+
+rect(1635,0,1655,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1500,0,1520,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1450,0,1465,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1410,0,1425,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1360,0,1380,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1310,0,1330,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+legend('topleft',
+       c('Lower fraction','Upper fraction'),
+       col = c('red','black'),
+       lty = 1,
+       bg = 'white')
+# dev.off
+
+
+
+
+win.graph()
+
+for(i in 1:length(rownames(sg))){
+  
+  plot(as.numeric(colnames(sg)),
+       sg[i,],
+       axes=F,
+       xlab = '',
+       ylab = '',
+   
+       xlim = c(1700,400),
+       ylim = c(-1e-04,1e-04),
+       type = 'l',
+       col = class[i])
+  par(new = T)
+  
+  
+}
+axis(1)
+axis(2)
+box()
+
+title(xlab = 'wave number cm-1',
+ylab = '2nd derivative of abs')
+
+legend('topleft',
+       c('Lower fraction','Upper fraction'),
+       col = c('red','black'),
+       lty = 1)
+
+win.graph()
+fviz_dend(res.hk, cex = 0.6, palette = "jco", 
+          rect = TRUE, rect_border = "jco", rect_fill = TRUE)
+
+#pca
+win.graph()
+plot(coord.bl.2d[,1],
+     coord.bl.2d[,2],
+     pch = 19,
+     xlab = paste('PC 1 -',as.character(varianza.bl.2d[1]), '%'),
+     ylab = paste('PC 2 -',as.character(varianza.bl.2d[2]), '%'),
+     col = class
+)
+abline(h = 0, v = 0, lty= 2)
+
+x  <- coord.bl.2d[,1]
+y  <- coord.bl.2d[,2]
+z  <- coord.bl.2d[,3]
+
+x1 <- x[class=='red']
+y1 <- y[class=='red']
+z1 <- z[class=='red']
+library(car)
+ellipse(c(mean(x1),mean(y1)),
+        cov(cbind(x1,y1)),
+        radius= sqrt(qnorm(.95)), 
+        col="red",
+        center.pch=FALSE,
+        add=TRUE,
+        # levels=0.95,
+        fill=TRUE,
+        lwd=0.8,
+        
+) 
+
+x2 <- x[class=='black']
+y2 <- y[class=='black']
+z2 <- z[class=='black']
+
+ellipse(c(mean(x2),mean(y2)),
+        cov(cbind(x2,y2)),
+        radius= sqrt(qnorm(.95)), 
+        col="black",
+        center.pch=FALSE,
+        add=TRUE,
+        # levels=0.95,
+        fill=TRUE,
+        lwd=0.8,
+        
+) 
+
+
+## pca 3d
+
+library(rgl)
+rgl_init()         
+r3dDefaults$windowRect <- c(0,50, 1200, 1200) 
+rgl.spheres(x, y, z, r = 0.5, color = class) 
+# text3d(x,y,z, rownames(coord), pos=3, col="black")
+rgl_add_axes(x, y, z, show.bbox = FALSE)
+aspect3d(1,1,1)
+
+ellips1 <- ellipse3d(cov(cbind(x1,y1,z1)), 
+                     centre=c(mean(x1), 
+                              mean(y1), 
+                              mean(z1)), 
+                     level = 0.95)
+shade3d(ellips1, col = "red", alpha=0.15, lit = FALSE)
+
+ellips2 <- ellipse3d(cov(cbind(x2,y2,z2)), 
+                     centre=c(mean(x2), 
+                              mean(y2), 
+                              mean(z2)), 
+                     level = 0.95)
+shade3d(ellips2, col = "black", alpha=0.15, lit = FALSE)
