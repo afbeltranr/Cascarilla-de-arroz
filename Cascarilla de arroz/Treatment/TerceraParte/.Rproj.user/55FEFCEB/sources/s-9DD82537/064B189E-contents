@@ -43,7 +43,7 @@ rect(1360,0,1380,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
 
 rect(1310,0,1330,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
 legend('topleft',
-       c('Lower fraction','Upper fraction'),
+       c('50C Colombia SS','50C Colombia'),
        col = c('red','black'),
        lty = 1,
        bg = 'white')
