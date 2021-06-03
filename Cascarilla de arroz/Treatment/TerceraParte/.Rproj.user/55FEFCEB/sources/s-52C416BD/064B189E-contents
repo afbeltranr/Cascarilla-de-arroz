@@ -153,3 +153,29 @@ win.graph()
 
 fviz_dend(res.hk, cex = 0.6, palette = "jco", 
           rect = TRUE, rect_border = "jco", rect_fill = TRUE, ylim = c(-5e-05,2e-04))
+
+# Loadings
+
+win.graph()
+library(RColorBrewer)
+for(i in 1:2){
+  plot(as.numeric(colnames(corregido2)),
+       loadings[,i],
+       type = 'l',
+       ylim = c(-0.15,0.2),
+       xlim = c(1700,400),
+       ylab = 'PC Loadings',
+       xlab = expression(paste("Wave number (cm"^"-1",")")),
+       col= brewer.pal(3,'Dark2')[i],
+       
+       
+  )
+  
+  par(new =T)  
+}
+abline(h=0)
+legend('topleft',
+       c('PC1','PC2'),
+       col = brewer.pal(3,'Dark2')[1:2],
+       lty = 1,
+       lw = 2)
