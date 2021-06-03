@@ -1,10 +1,9 @@
 ---
 title: "Procesamiento 3"
-author: "Andres Felipe Beltran"
+author: "Maria Candelaria Dorta Delgado - Andres Felipe Beltran"
 date: "5/11/2021"
 output:
-   prettydoc::html_pretty:
-     theme: cayman
+   rmdformats::downcute
 ---
 
 En este documento se presenta el flujo de trabajo utilizado para procesar los espectros compartidos en las carpetas `3_T 50` y `3 SST50`
@@ -222,7 +221,7 @@ NaCl <- vector('character', length(rownames(prom)))
 
 for(i in 1:40){
   
- if(grepl('SS', rownames(prom)[i],perl =T)){NaCl[i]<- 'blue'}
+ if(grepl('SS', rownames(prom)[i],perl =T)){NaCl[i]<- 'red'}
   else{NaCl[i]<- 'black'}
   
 }
@@ -321,22 +320,158 @@ for(i in 1:3){
 
 Con esto podemos confirmar que la desviación por deriva instrumental no se debe a una de las replicas, si no a la muestra `UF3 A`. A pesar de que con el tratamiento de corrección de línea base se elimina este problema, es importante confirmar cual es la muestra que presenta esta deriva.
 
+Podemos graficar los espectros corregidos para este experimento:
+
+```{r}
+for(i in 1:length(rownames(corregido2))){
+  plot(wn.Rango1,
+       corregido2[i,],
+       xlab = 'wave number cm-1',
+       ylab = 'absorbance a.u.',
+       xlim = c(1700,400),
+       ylim = c(0,0.06),
+       type = 'l',
+       col = NaCl[i])
+  par(new = T)
+  
+  
+}
+legend('topleft',
+       c('50C Colombia SS','50C Colombia'),
+       col = c('red','black'),
+       lty = 1)
+```
+
+
+# Derivatización de espectros
+
+```{r}
+library(prospectr)
+w2 <- 40
+sg <- matrix(ncol = ncol(corregido2)-w2, nrow= nrow(corregido2))
+sg <- as.data.frame(sg) 
+# for (i in 1:31){
+sg<- savitzkyGolay(X = corregido2
+                        ,m = 2,
+                        p = 3,
+                        w = w2+1,
+                        delta.wav=2)
+# }
+# colnames(sg) <- colnames( savitzkyGolay(X = corregido2[1,]
+#                         ,m = 2,
+#                         p = 3,
+#                         w = w2+1,
+#                         delta.wav=2))
+rownames(sg) <- rownames(corregido2)
+# win.graph()
+for(i in 1:length(rownames(sg))){
+  
+  plot(as.numeric(colnames(sg)),
+       sg[i,],
+       xlab = 'wave number cm-1',
+       ylab = '2nd derivative of abs',
+       xlim = c(1700,400),
+        ylim = c(-5e-05,5e-05),
+       type = 'l',
+       col = NaCl[i])
+  par(new = T)
+  
+  
+}
+legend('topleft',
+       c('50C Colombia SS','50C Colombia'),
+       col = c('red','black'),
+       lty = 1)
+```
+
+
+
 # Análisis exploratorio
 
 
 
 
 ```{r}
-pca.bl <- prcomp(corregido2, scale =F, center = T)
-vp.bl <- (pca.bl$sdev)^2
-varianza.bl <- round(vp.bl/sum(vp.bl)*100, 2)
-varianza.bl
+pca.bl.sg <- prcomp(sg, scale =T, center = T)
+vp.bl.sg <- (pca.bl.sg$sdev)^2
+varianza.bl.sg <- round(vp.bl.sg/sum(vp.bl.sg)*100, 2)
+varianza.bl.sg
 ```
+
+```{r}
+coord.bl.sg <- pca.bl.sg$x
+
+plot(coord.bl.sg[,1],
+     coord.bl.sg[,2],
+     pch = 19,
+     xlab = paste('PC 1 -',as.character(varianza.bl.sg[1]), '%'),
+     ylab = paste('PC 2 -',as.character(varianza.bl.sg[2]), '%'),
+     col = NaCl,
+     xlim = c(-20,90)
+     )
+abline(h = 0, v= 0, lty = 2)
+text(coord.bl.sg[,1],
+     coord.bl.sg[,2],
+     rownames(coord.bl.sg),
+     pos = 4,
+     cex = 0.5)
+
+```
+
+
+```{r}
+x  <- coord.bl.sg[,1]
+y  <- coord.bl.sg[,2]
+z  <- coord.bl.sg[,3]
+x1 <- x[NaCl=='red']
+y1 <- y[NaCl=='red']
+z1 <- z[NaCl=='red']
+x2 <- x[NaCl=='black']
+y2 <- y[NaCl=='black']
+z2 <- z[NaCl=='black']
+
+plot(coord.bl.sg[,1],
+     coord.bl.sg[,2],
+     pch = 19,
+     xlab = paste('PC 1 -',as.character(varianza.bl.sg[1]), '%'),
+     ylab = paste('PC 2 -',as.character(varianza.bl.sg[2]), '%'),
+     col = NaCl
+     )
+abline(h = 0, v= 0, lty = 2)
+library(car)
+ellipse(c(mean(x1),mean(y1)),
+        cov(cbind(x1,y1)),
+        radius= sqrt(qchisq(.95, df =2)), 
+        col="red",
+        center.pch=FALSE,
+        add=TRUE,
+        # levels=0.95,
+        fill=TRUE,
+        lwd=0.8,
+        
+) 
+# ellipse(c(mean(x2),mean(y2)),
+#         cov(cbind(x2,y2)),
+#         radius= sqrt(qnorm(.95)), 
+#         col="black",
+#         center.pch=FALSE,
+#         add=TRUE,
+#         # levels=0.95,
+#         fill=TRUE,
+#         lwd=0.8,
+#         
+# ) 
+ 
+```
+
+
+
 ```{r}
 library(mdatools)
 mdaPCA <-pca(corregido2, 5, center = TRUE, scale = TRUE)
 summary(mdaPCA)
-win.graph()
+plot(mdaPCA, show.labels = T)
+# win.graph()
 plotScores(mdaPCA$res$cal, show.labels = TRUE)
 ```
 Ya que mediante PCA para estas muestras en específico, no se obserban agrupamientos notorios, podemos exportar estos resultados y compararlos con los resultados de los experimentos anteriores:

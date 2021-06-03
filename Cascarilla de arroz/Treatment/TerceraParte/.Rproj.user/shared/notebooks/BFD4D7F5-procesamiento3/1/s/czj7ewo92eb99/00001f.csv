@@ -1,0 +1,4 @@
+"0","legend('topleft',"
+"0","       c('50C Colombia SS','50C Colombia'),"
+"0","       col = c('red','black'),"
+"0","       lty = 1)"
