@@ -1,0 +1,3 @@
+"0","prom <- matrix(,"
+"0","               ncol = ncol(datat),"
+"0","               nrow = nrow(datat)/3)"

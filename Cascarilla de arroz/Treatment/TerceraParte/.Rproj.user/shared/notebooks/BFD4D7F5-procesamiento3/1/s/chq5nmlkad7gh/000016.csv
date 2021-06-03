@@ -1,0 +1,8 @@
+"0","df <- sg"
+"0","library(factoextra)"
+"0","res.hk <-hkmeans(df, "
+"0","                 4,"
+"0","                 hc.metric =  'minkowski')"
+"0",""
+"0","fviz_dend(res.hk, cex = 0.6, palette = ""jco"", "
+"0","          rect = TRUE, rect_border = ""jco"", rect_fill = TRUE, ylim = c(-5e-05,2e-04))"

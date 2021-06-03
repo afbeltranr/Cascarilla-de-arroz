@@ -1,0 +1,3 @@
+"0",""
+"0","corregido <- as.data.frame(spc3[1:40])"
+"0","corregido2 <- as.data.frame(corregido[,1])"
