@@ -343,6 +343,40 @@ legend('topleft',
        lty = 1)
 ```
 
+```{r}
+pca.bl <- prcomp(corregido2, scale =T, center = T)
+vp.bl <- (pca.bl$sdev)^2
+varianza.bl <- round(vp.bl/sum(vp.bl)*100, 2)
+varianza.bl
+coord.bl <- pca.bl$x
+loadings <- pca.bl$rotation
+```
+```{r}
+library(RColorBrewer)
+for(i in 1:2){
+  plot(as.numeric(colnames(corregido2)),
+       loadings[,i],
+       type = 'l',
+       ylim = c(-0.15,0.2),
+       xlim = c(1700,400),
+       ylab = 'PC Loadings',
+       xlab = expression(paste("Wave number (cm"^"-1",")")),
+       col= brewer.pal(3,'Dark2')[i],
+       
+       
+  )
+  
+  par(new =T)  
+}
+abline(h=0)
+legend('topleft',
+       c('PC1','PC2'),
+       col = brewer.pal(3,'Dark2')[1:2],
+       lty = 1,
+       lw = 2)
+```
+
+
 
 # Derivatización de espectros
 
@@ -410,10 +444,11 @@ pca.bl.sg <- prcomp(sg, scale =T, center = T)
 vp.bl.sg <- (pca.bl.sg$sdev)^2
 varianza.bl.sg <- round(vp.bl.sg/sum(vp.bl.sg)*100, 2)
 varianza.bl.sg
+coord.bl.sg <- pca.bl.sg$x
 ```
 
 ```{r}
-coord.bl.sg <- pca.bl.sg$x
+
 
 plot(coord.bl.sg[,1],
      coord.bl.sg[,2],
