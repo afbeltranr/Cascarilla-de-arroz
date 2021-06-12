@@ -1,0 +1,201 @@
+
+win.graph()
+for(i in 1:length(rownames(corregido2))){
+  plot(wn.Rango2,
+       corregido2[i,],
+       axes=F,
+       xlab = '',
+       ylab = '',
+       xlim = c(1700,790),
+       ylim = c(0,0.06),
+       type = 'l',
+       lty = fraction[i],
+       col = NaCl[i])
+  par(new = T)
+  
+  
+}
+
+axis(1)
+axis(2)
+box()
+title(main="",
+      xlab=expression(paste("Wave number (cm"^"-1",")")),
+      ylab="Absorbance (a.u.)",
+)
+
+
+rect(1065,0,1025,1, col= rgb(0.302,0.686,0.29,alpha=0.2), border = NA)
+rect(465,0,445,1, col= rgb(0.302,0.686,0.29,alpha=0.2), border = NA)
+rect(789,0,809,1, col= rgb(0.302,0.686,0.29,alpha=0.2), border = NA)
+
+
+
+
+
+rect(1635,0,1655,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1500,0,1520,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1450,0,1465,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1410,0,1425,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1360,0,1380,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+
+rect(1310,0,1330,1, col= rgb(0.216,0.494,0.722,0.29,alpha=0.2), border = NA)
+legend('topleft',
+       c('@50C Colombia SS','@50C Colombia','50C Colombia SS','50C Colombia'),
+       col = c('red','black'),
+       lty = c(1,1,2,2),
+       bg = 'white')
+# derivative spectra
+win.graph()
+for(i in 1:length(rownames(sg))){
+  
+  plot(as.numeric(colnames(sg)),
+       sg[i,],
+       axes=F,
+       xlab = '',
+       ylab = '',
+       xlim = c(1640,790),
+       ylim = c(-4e-05,4e-05),
+       type = 'l',
+       lty = fraction[i],
+       col = NaCl[i])
+  par(new = T)
+  
+  
+}
+
+axis(1)
+axis(2)
+box()
+title(main="",
+      xlab=expression(paste("Wave number (cm"^"-1",")")),
+      ylab="second derivative of absorbance (a.u.)",
+)
+legend('topleft',
+       c('@50C Colombia SS','@50C Colombia','50C Colombia SS','50C Colombia'),
+       col = c('red','black'),
+       lty = c(1,1,2,2),
+       bg = 'white')
+
+
+coord.bl.sg <- pca.bl.sg$x
+win.graph()
+plot(coord.bl.sg[,1],
+     coord.bl.sg[,2],
+     pch = 19,
+     xlab = paste('PC 1 -',as.character(varianza.bl.sg[1]), '%'),
+     ylab = paste('PC 2 -',as.character(varianza.bl.sg[2]), '%'),
+     col = res.hk$cluster,
+     xlim = c(-20,90)
+)
+abline(h = 0, v= 0, lty = 2)
+
+x<- coord.bl.sg[,1]
+y<- coord.bl.sg[,2]
+z<- coord.bl.sg[,3]
+
+x1<- x[res.hk$cluster == 1]
+y1<- y[res.hk$cluster == 1]
+z1<- z[res.hk$cluster == 1]
+
+library(car)
+ellipse(c(mean(x1),mean(y1)),
+        cov(cbind(x1,y1)),
+        radius= sqrt(qchisq(.95, df =2)), 
+        col=1,
+        center.pch=FALSE,
+        add=TRUE,
+        # levels=0.95,
+        fill=TRUE,
+        lwd=0.8,
+        
+) 
+
+x2<- x[res.hk$cluster == 2]
+y2<- y[res.hk$cluster == 2]
+z2<- z[res.hk$cluster == 2]
+
+ellipse(c(mean(x2),mean(y2)),
+        cov(cbind(x2,y2)),
+        radius= sqrt(qchisq(.95, df =2)), 
+        col=2,
+        center.pch=FALSE,
+        add=TRUE,
+        # levels=0.95,
+        fill=TRUE,
+        lwd=0.8,
+        
+) 
+
+x3<- x[res.hk$cluster == 3]
+y3<- y[res.hk$cluster == 3]
+z3<- z[res.hk$cluster == 3]
+
+ellipse(c(mean(x3),mean(y3)),
+        cov(cbind(x3,y3)),
+        radius= sqrt(qchisq(.95, df =2)), 
+        col=3,
+        center.pch=FALSE,
+        add=TRUE,
+        # levels=0.95,
+        fill=TRUE,
+        lwd=0.8,
+        
+) 
+
+legend('bottomleft',
+       c('Cluster 1 (SS and lower fraction)',
+         'Cluster 2',
+         'Cluster 3',
+         'Cluster 4',
+         'Cluster 5'),
+       pch = 19,
+       col = c(1,2,3,4,5))
+
+
+# HCA ------------
+
+library(factoextra)
+win.graph()
+
+fviz_dend(res.hk, 
+          cex = 0.6, 
+          
+          rect = T, 
+          rect_border = c(4 ,3, 5, 1,2),
+          rect_fill = TRUE, 
+          ylim = c(-5e-05,2e-04), k_colors = c(4 ,3, 5, 1,2))
+
+# Loadings
+
+win.graph()
+
+loadings <- pca.bl.sg$rotation
+library(RColorBrewer)
+for(i in 1:2){
+  plot(as.numeric(colnames(sg)),
+       loadings[,i],
+       type = 'l',
+       ylim = c(-0.15,0.2),
+       xlim = c(1640,790),
+       ylab = 'PC Loadings',
+       xlab = expression(paste("Wave number (cm"^"-1",")")),
+       col= c('darkgreen',
+              'red')[i]
+       
+       
+  )
+  
+  par(new =T)  
+}
+abline(h=0)
+legend('topleft',
+       c('PC1','PC2'),
+       col = c('darkgreen',
+               'red'),
+       lty = 1,
+       lw = 2)

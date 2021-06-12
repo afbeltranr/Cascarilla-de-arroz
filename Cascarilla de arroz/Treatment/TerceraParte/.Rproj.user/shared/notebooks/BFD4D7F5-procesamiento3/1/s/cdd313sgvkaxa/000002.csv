@@ -1,0 +1,2 @@
+"0","Rango2 <- Rango1[, -c(1:163)]"
+"0","wn.Rango2 <- wn.Rango1[-c(1:163)] # Quitando desde 790 hacia abajo"
